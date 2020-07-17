@@ -1,4 +1,5 @@
 import numpy as np
+import random
 from pyglet.window import key
 
 # individual agent policy
@@ -30,14 +31,12 @@ class InteractivePolicy(Policy):
             if self.move[2]: u = 4
             if self.move[3]: u = 3
         else:
-            u = np.zeros(5) # 5-d because of no-move action
-            if self.move[0]: u[1] += 1.0
-            if self.move[1]: u[2] += 1.0
-            if self.move[3]: u[3] += 1.0
-            if self.move[2]: u[4] += 1.0
-            if True not in self.move:
-                u[0] += 1.0
-        return np.concatenate([u, np.zeros(self.env.world.dim_c)])
+            u = np.zeros(2) # 5-d because of no-move action
+            if self.move[0]: u[0] += 0.2
+            if self.move[1]: u[0] += -0.2
+            if self.move[3]: u[1] += 0.2
+            if self.move[2]: u[1] += -0.2
+        return u
 
     # keyboard event callbacks
     def key_press(self, k, mod):
@@ -50,3 +49,27 @@ class InteractivePolicy(Policy):
         if k==key.RIGHT: self.move[1] = False
         if k==key.UP:    self.move[2] = False
         if k==key.DOWN:  self.move[3] = False
+
+class RandomPolicy(Policy):
+    def __init__(self, env, agent_index):
+        super(RandomPolicy, self).__init__()
+        self.env = env
+        self.move = [False for i in range(2)]
+
+    def action(self, obs):
+        #Get random move
+        self.move = [bool(random.getrandbits(1)) for i in range(2)]
+        # ignore observation and just act based on keyboard events
+        if self.env.discrete_action_input:
+            u = 0
+            if self.move[0]: u = 1
+            if self.move[1]: u = 2
+            if self.move[2]: u = 4
+            if self.move[3]: u = 3
+        else:
+            u = np.zeros(2) # 5-d because of no-move action
+            if self.move[0]: u[0] += random.uniform(-0.5, 0.5)
+            if self.move[1]: u[1] += random.uniform(-0.5, 0.5)
+            #if self.move[3]: u[3] += 1.0
+            #if self.move[2]: u[4] += 1.0
+        return u
