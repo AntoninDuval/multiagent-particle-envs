@@ -38,6 +38,8 @@ class Entity(object):
         self.density = 25.0
         # color
         self.color = None
+        # Filled
+        self.filled = True
         # max speed and accel
         self.max_speed = None
         self.accel = None
@@ -54,6 +56,13 @@ class Entity(object):
 class Landmark(Entity):
      def __init__(self):
         super(Landmark, self).__init__()
+
+# properties of Radius entities
+class Radius(Entity):
+     def __init__(self):
+        super(Radius, self).__init__()
+        self.collide = False
+        self.filled = False
 
 # properties of agent entities
 class Agent(Entity):
@@ -84,6 +93,7 @@ class World(object):
         # list of agents and entities (can change at execution-time!)
         self.agents = []
         self.landmarks = []
+        self.radius = []
         # communication channel dimensionality
         self.dim_c = 0
         # position dimensionality
@@ -101,7 +111,7 @@ class World(object):
     # return all entities in the world
     @property
     def entities(self):
-        return self.agents + self.landmarks
+        return self.agents + self.landmarks + self.radius
 
     # return all agents controllable by external policies
     @property
@@ -127,8 +137,12 @@ class World(object):
         p_force = self.apply_environment_force(p_force)
         # integrate physical state
         self.integrate_state(p_force)
+        # update radius state
+        for i, radius in enumerate(self.radius):
+            radius.state.p_pos = self.agents[i].state.p_pos
+
         # update agent state
-        for agent in self.agents:
+        for agent  in self.agents:
             self.update_agent_state(agent)
 
     # gather agent action forces
@@ -175,7 +189,7 @@ class World(object):
             agent.state.c = np.zeros(self.dim_c)
         else:
             noise = np.random.randn(*agent.action.c.shape) * agent.c_noise if agent.c_noise else 0.0
-            agent.state.c = agent.action.c + noise      
+            agent.state.c = agent.action.c + noise
 
     # get collision forces for any contact between two entities
     def get_collision_force(self, entity_a, entity_b):

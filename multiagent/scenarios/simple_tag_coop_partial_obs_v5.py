@@ -1,5 +1,5 @@
 import numpy as np
-from multiagent.core import World, Agent, Landmark
+from multiagent.core import World, Agent, Landmark, Radius
 from multiagent.scenario import BaseScenario
 
 
@@ -12,6 +12,7 @@ class Scenario(BaseScenario):
         num_adversaries = 3
         num_agents = num_adversaries + num_good_agents # deactivate "good" agent
         num_landmarks = 2
+        num_view_radius = num_adversaries
         # add agents
         world.agents = [Agent() for i in range(num_agents)]
         for i, agent in enumerate(world.agents):
@@ -24,7 +25,7 @@ class Scenario(BaseScenario):
             #agent.accel = 20.0 if agent.adversary else 25.0
             agent.max_speed = 1.0 if agent.adversary else 1.3
             agent.action_callback = None if i < (num_agents-1) else self.prey_policy
-            agent.view_radius = int(getattr(args, "agent_view_radius", -1))
+            agent.view_radius = args['view_radius']
             print("AGENT VIEW RADIUS set to: {}".format(agent.view_radius))
         # add landmarks
         world.landmarks = [Landmark() for i in range(num_landmarks)]
@@ -34,6 +35,15 @@ class Scenario(BaseScenario):
             landmark.movable = False
             landmark.size = 0.2
             landmark.boundary = False
+
+        world.radius = [Radius() for i in range(num_view_radius)]
+        for i, radius in enumerate(world.radius):
+            radius.name = 'radius %d' % i
+            radius.collide = False
+            radius.movable = False
+            radius.size = 0.75
+            radius.boundary = False
+
         # make initial conditions
         self.reset_world(world)
         self.score_function= getattr(args, "score_function", "sum")
@@ -68,6 +78,12 @@ class Scenario(BaseScenario):
                         scores[dist < dist_min] = -9999999
                         if i == n_iter - 1 and _agent.movable:
                             scores += dist
+                # Discourage the agent to leave the screen
+                # Code should be improved
+                scores[np.transpose(proj_pos)[0]<-1] = -9999999
+                scores[np.transpose(proj_pos)[0] > 1] = -9999999
+                scores[np.transpose(proj_pos)[1] < -1] = -9999999
+                scores[np.transpose(proj_pos)[1] > 1] = -9999999
         elif self.score_function == "min":
             rel_dis = []
             adv_names = []
@@ -101,6 +117,10 @@ class Scenario(BaseScenario):
             # random properties for landmarks
         for i, landmark in enumerate(world.landmarks):
             landmark.color = np.array([0.25, 0.25, 0.25])
+
+        for i, radius in enumerate(world.radius):
+            radius.color = np.array([0.25, 0.25, 0.25])
+
         # set random initial states
         for agent in world.agents:
             agent.state.p_pos = np.random.uniform(-1, +1, world.dim_p)
@@ -110,6 +130,10 @@ class Scenario(BaseScenario):
             if not landmark.boundary:
                 landmark.state.p_pos = np.random.uniform(-0.9, +0.9, world.dim_p)
                 landmark.state.p_vel = np.zeros(world.dim_p)
+
+        for i, radius in enumerate(world.radius):
+            radius.state.p_pos = world.agents[i].state.p_pos
+            radius.state.p_vel = world.agents[i].state.p_pos
 
 
     def benchmark_data(self, agent, world):

@@ -245,6 +245,8 @@ class MultiAgentEnv(gym.Env):
                 xform = rendering.Transform()
                 if 'agent' in entity.name:
                     geom.set_color(*entity.color, alpha=0.5)
+                elif 'radius' in entity.name:
+                    geom.set_color(*entity.color, alpha=0.05)
                 else:
                     geom.set_color(*entity.color)
                 geom.add_attr(xform)

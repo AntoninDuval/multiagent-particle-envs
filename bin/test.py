@@ -7,13 +7,20 @@ import numpy as np
 from multiagent.environment import MultiAgentEnv
 from multiagent.policy import RandomPolicy
 import multiagent.scenarios as scenarios
+import time
 
 if __name__ == '__main__':
 
+    # Load arguments
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("agent_view_radius")
+    args = parser.parse_args()
+
     # load scenario from script
-    scenario = scenarios.load('simple_tag_coop.py').Scenario()
+    scenario = scenarios.load('simple_tag_coop_partial_obs_v5.py').Scenario()
     # create world
-    world = scenario.make_world()
+    world = scenario.make_world(args)
     # create multiagent environment
     env = MultiAgentEnv(world, scenario.reset_world, scenario.reward, scenario.observation, info_callback=None, shared_viewer = True)
     # render call to create viewer window (necessary only for interactive policies)
@@ -26,10 +33,10 @@ if __name__ == '__main__':
         # query for action from each agent's policy
         act_n = []
         for i, policy in enumerate(policies):
-            act_n.append(policy.action(obs_n[i]))
+            act_n.append(env.world.agents[3].state.p_pos/8)
         # step environment
         obs_n, reward_n, done_n, _ = env.step(act_n)
-        print(reward_n)
+        #print(obs_n[0])
         # render all agent views
         env.render()
         # display rewards

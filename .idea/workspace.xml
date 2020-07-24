@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6d487e14-e4c5-477e-8f06-495362b09a03" name="Default" comment="" />
+    <list default="true" id="6d487e14-e4c5-477e-8f06-495362b09a03" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/multiagent-particle-envs.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/multiagent-particle-envs.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multiagent/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/multiagent/core.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multiagent/environment.py" beforeDir="false" afterPath="$PROJECT_DIR$/multiagent/environment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multiagent/scenarios/simple_tag_coop_partial_obs_v2.py" beforeDir="false" afterPath="$PROJECT_DIR$/multiagent/scenarios/simple_tag_coop_partial_obs_v2.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,33 +23,14 @@
       </list>
     </option>
   </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>coll</find>
-      <find>c</find>
-      <find>register</find>
-      <find>scenario</find>
-      <find>policy</find>
-      <find>action_callback</find>
-      <find>_set_action</find>
-      <find>discrete_action_space</find>
-      <find>observat</find>
-      <find>observation_space</find>
-      <find>get_obs_size</find>
-      <find>3x3</find>
-      <find>action_space</find>
-    </findStrings>
-    <dirStrings>
-      <dir>$PROJECT_DIR$</dir>
-    </dirStrings>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1QyAdhBZASH8jwdCHQzWs8QsZ4e" />
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/multiagent/scenarios" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
@@ -66,7 +55,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.test">
     <configuration name="simple_tag_coop_partial_obs" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="multiagent-particle-envs" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -88,8 +77,34 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="multiagent-particle-envs" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/bin" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/bin/test.py" />
+      <option name="PARAMETERS" value="1" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.simple_tag_coop_partial_obs" />
+      <item itemvalue="Python.test" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.test" />
         <item itemvalue="Python.simple_tag_coop_partial_obs" />
       </list>
     </recent_temporary>
