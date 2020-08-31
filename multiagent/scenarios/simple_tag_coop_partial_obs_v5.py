@@ -9,7 +9,7 @@ class Scenario(BaseScenario):
         # set any world properties first
         world.dim_c = 2
         num_good_agents = 1
-        num_adversaries = 3
+        num_adversaries = args['num_adversaries']
         num_agents = num_adversaries + num_good_agents # deactivate "good" agent
         num_landmarks = 2
         num_view_radius = num_adversaries
@@ -41,12 +41,21 @@ class Scenario(BaseScenario):
             radius.name = 'radius %d' % i
             radius.collide = False
             radius.movable = False
-            radius.size = 0.75
+            radius.size = args['view_radius']
             radius.boundary = False
 
         # make initial conditions
         self.reset_world(world)
-        self.score_function= getattr(args, "score_function", "sum")
+        self.score_function= args['score_function']
+        self.prey_level= args['prey_level']
+        
+        world.env_info = {
+        'state_shape': (12+2*(num_adversaries-1))*num_adversaries,
+        'obs_shape': 12+2*(num_adversaries-1),
+        'n_actions': 2,
+        'n_agents': num_adversaries,
+        'episode_limit': 10
+    }
         return world
 
     def prey_policy(self, agent, world):
@@ -100,12 +109,23 @@ class Scenario(BaseScenario):
                 scores[dist < dist_min] = -9999999
                 if adv.name == min_dis_adv_name:
                     scores += dist
+        elif self.score_function == "random":
+            for i in range(n_iter):
+                waypoints_length = (length / float(n_iter)) * (i + 1)
+                x_wp = waypoints_length * np.cos(angle)
+                y_wp = waypoints_length * np.sin(angle)
+                proj_pos = np.vstack((x_wp, y_wp)).transpose() + agent.state.p_pos
+                scores[np.transpose(proj_pos)[0]<-1] = -9999999
+                scores[np.transpose(proj_pos)[0] > 1] = -9999999
+                scores[np.transpose(proj_pos)[1] < -1] = -9999999
+                scores[np.transpose(proj_pos)[1] > 1] = -9999999
+
         else:
             raise Exception("Unknown score function {}".format(self.score_function))
 
         # move to best position
         best_idx = np.argmax(scores)
-        chosen_action = np.array([x[best_idx], y[best_idx]], dtype=np.float32)
+        chosen_action = np.array([x[best_idx]*self.prey_level, y[best_idx]*self.prey_level], dtype=np.float32)
         if scores[best_idx] < 0:
             chosen_action *= 0.0 # cannot go anywhere
         return chosen_action
@@ -133,7 +153,7 @@ class Scenario(BaseScenario):
 
         for i, radius in enumerate(world.radius):
             radius.state.p_pos = world.agents[i].state.p_pos
-            radius.state.p_vel = world.agents[i].state.p_pos
+            radius.state.p_vel = world.agents[i].state.p_vel
 
 
     def benchmark_data(self, agent, world):
